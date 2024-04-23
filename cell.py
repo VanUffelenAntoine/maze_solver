@@ -2,7 +2,7 @@ from graphics import Line, Point
 
 
 class Cell:
-    def __init__(self, win):
+    def __init__(self, win = None):
         self.has_left_wall= True
         self.has_right_wall = True
         self.has_top_wall = True
@@ -14,6 +14,9 @@ class Cell:
         self._win = win
 
     def draw(self, x_t_left, y_t_left, x_b_right, y_b_right):
+        if self._win is None:
+            return
+        
         self._x1 = x_t_left
         self._y1 = y_t_left
         self._x2 = x_b_right
