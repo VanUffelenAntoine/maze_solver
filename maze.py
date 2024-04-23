@@ -3,7 +3,7 @@ import random
 from cell import Cell
 
 class Maze():
-    def __init__(self, x1, y1, num_rows, num_cols, cell_s_x, cell_s_y, win = None, seed = 0):
+    def __init__(self, x1, y1, num_rows, num_cols, cell_s_x, cell_s_y, win = None, seed = None):
         self.x1 = x1
         self.y1 = y1
         self.num_rows = num_rows
@@ -12,11 +12,13 @@ class Maze():
         self.c_s_y = cell_s_y
         self.win = win
         self._cells = []
-        self.seed = seed
+        if seed:
+            random.seed(seed)
 
         self.__create_cells()
         self.__break_entrance_and_exit()
         self.__break_walls_r(0,0)
+        self.__reset_cells_visited()
         
 
     def __create_cells(self):
@@ -85,3 +87,43 @@ class Maze():
                 self._cells[i + 1][j].has_left_wall = False
             
             self.__break_walls_r(next[0], next[1])
+
+    def __reset_cells_visited(self):
+        for i in range(self.num_cols):
+            for j in range(self.num_rows):
+                self._cells[i][j].visited = False
+
+    def solve(self):
+        return self.__solve_r(0,0)
+
+    def __solve_r(self, i, j):
+        self.__animate()
+        self._cells[i][j].visited = True
+
+        if i == self.num_cols - 1 and j == self.num_rows - 1:
+            return True
+        
+        to_visit = []
+
+        if j > 0 and not self._cells[i][j - 1].visited and not self._cells[i][j - 1].has_bottom_wall:
+            to_visit.append((i, j - 1))
+        if j < self.num_rows - 1 and not self._cells[i][j + 1].visited and not self._cells[i][j + 1].has_top_wall:
+            to_visit.append((i, j + 1))
+        if i > 0 and not self._cells[i -1][j].visited and not self._cells[i -1][j].has_right_wall:
+            to_visit.append((i - 1, j))
+        if i < self.num_cols - 1 and not self._cells[i + 1][j].visited and not self._cells[i + 1][j].has_left_wall:
+            to_visit.append((i + 1, j))
+
+        for direction in to_visit:
+            self._cells[i][j].draw_move(self._cells[direction[0]][direction[1]])
+            result = self.__solve_r(direction[0], direction[1])
+            if result == True:
+                return True
+            else:
+                self._cells[i][j].draw_move(self._cells[direction[0]][direction[1]], True)
+        
+        return False
+
+            
+        
+        

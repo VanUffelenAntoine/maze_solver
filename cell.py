@@ -39,8 +39,9 @@ class Cell:
             self._win.draw_line(Line(Point(x_b_right, y_t_left), Point(x_b_right, y_b_right)))
         else:
             self._win.draw_line(Line(Point(x_b_right, y_t_left), Point(x_b_right, y_b_right)), "black")
+    
     def draw_move(self, to_cell, undo = False):
-        col = 'red' if undo else 'grey'
+        col = 'red' if not undo else 'grey'
 
         half_self = abs(self._x2 - self._x1) // 2
         center_self_x = half_self + self._x1

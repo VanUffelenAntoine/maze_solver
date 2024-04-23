@@ -25,6 +25,8 @@ def main():
     win = Window(screen_x, screen_y)
     maze = Maze(margin, margin, num_row, num_col, cell_size_x, cell_size_y, win)   
 
+    maze.solve()
+    
     win.wait_for_close()
 
 main()
