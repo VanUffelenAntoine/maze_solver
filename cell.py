@@ -27,3 +27,19 @@ class Cell:
             self._win.draw_line(Line(Point(x_t_left, y_t_left), Point(x_t_left, y_b_right)))
         if self.has_right_wall:
             self._win.draw_line(Line(Point(x_b_right, y_t_left), Point(x_b_right, y_b_right)))
+
+    def draw_move(self, to_cell, undo = False):
+        col = 'red' if undo else 'grey'
+
+        half_self = abs(self._x2 - self._x1) // 2
+        center_self_x = half_self + self._x1
+        center_self_y = half_self + self._y1
+
+        half_other = abs(to_cell._x2 - to_cell._x1) // 2
+        center_other_x = half_other + to_cell._x1
+        center_other_y = half_other + to_cell._y1
+
+        line = Line(
+            Point(center_self_x, center_self_y),
+            Point(center_other_x, center_other_y))
+        self._win.draw_line(line, col)
